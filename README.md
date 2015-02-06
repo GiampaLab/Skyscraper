@@ -1,2 +1,0 @@
-# Skyscraper
-SignalR experiment

@@ -1,7 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-public class GameData
+namespace Skyscraper
 {
-    [JsonProperty(PropertyName = "symbolsForEachCard")]
-    public int SymbolsForEachCard { get; set; }
+    public class GameData
+    {
+        [JsonProperty(PropertyName = "symbolsForEachCard")]
+        public int SymbolsForEachCard { get; set; }
+    }
 }

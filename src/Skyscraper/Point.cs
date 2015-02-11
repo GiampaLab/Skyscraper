@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 
-public class Point
+namespace Skyscraper
 {
-    public IEnumerable<Line> Lines { get; private set; }
-
-    public Point(IEnumerable<Line> lines)
+    public class Point
     {
-        Lines = lines;
+        public IEnumerable<Line> Lines { get; private set; }
+
+        public Point(IEnumerable<Line> lines)
+        {
+            Lines = lines;
+        }
     }
 }

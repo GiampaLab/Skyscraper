@@ -1,4 +1,7 @@
-﻿public interface IGameFactory
+﻿namespace Skyscraper
 {
-    GameInfo Create(int symbolsForEachCard);
+    public interface IGameFactory
+    {
+        GameInfo Create(int symbolsForEachCard);
+    }
 }

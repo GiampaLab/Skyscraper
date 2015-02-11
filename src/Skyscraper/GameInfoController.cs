@@ -1,18 +1,21 @@
 ﻿using Microsoft.AspNet.Mvc;
 
-[Route("api/[controller]")]
-public class GameInfoController
+namespace Skyscraper
 {
-    private readonly IGameFactory _gameFactory;
-
-    public GameInfoController(IGameFactory gameFactory)
+    [Route("api/[controller]")]
+    public class GameInfoController
     {
-        _gameFactory = gameFactory;
-    }
+        private readonly IGameFactory _gameFactory;
 
-    [HttpPost]
-    public GameInfo Create([FromBody]GameData gameData)
-    {
-        return _gameFactory.Create(gameData.SymbolsForEachCard);
+        public GameInfoController(IGameFactory gameFactory)
+        {
+            _gameFactory = gameFactory;
+        }
+
+        [HttpPost]
+        public GameInfo Create([FromBody]GameData gameData)
+        {
+            return _gameFactory.Create(gameData.SymbolsForEachCard);
+        }
     }
 }

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Skyscraper
 {
-    public class Point
+    public class Point : IEquatable<Point>
     {
         public IEnumerable<Line> Lines { get; private set; }
         public int Iteration { get; private set; }
@@ -11,6 +13,11 @@ namespace Skyscraper
         {
             Lines = lines;
             Iteration = iteration;
+        }
+
+        public bool Equals(Point other)
+        {
+            return Lines.All(l => other.Lines.Contains(l));
         }
     }
 }

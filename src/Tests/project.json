@@ -1,7 +1,8 @@
 ﻿{
     "version": "1.0.0-*",
     "dependencies": {
-        "NUnit": "2.6.4",
+		"NUnit": "2.6.4",
+		"NUnitTestAdapter": "1.2.0",
         "NSubstitute": "1.8.1",
         "Skyscraper": ""
     },

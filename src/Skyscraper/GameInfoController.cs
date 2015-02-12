@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNet.Mvc;
 
 namespace Skyscraper
 {
@@ -15,7 +16,23 @@ namespace Skyscraper
         [HttpPost]
         public GameInfo Create([FromBody]GameData gameData)
         {
-            return _gameFactory.Create(gameData.SymbolsForEachCard);
+            var gameInfo = _gameFactory.Create(gameData.SymbolsForEachCard);
+            var isCorrect = true;
+            foreach (var card in gameInfo.Cards)
+            {
+                var card1 = card;
+                foreach (var secondCard in gameInfo.Cards.Where(c => c != card1))
+                {
+                    var secondCard1 = secondCard;
+                    var commonSymbol = card1.Lines.Where(l => secondCard1.Lines.Contains(l));
+                    if (commonSymbol.Count() != 1)
+                    {
+                        isCorrect = false;
+                        break;
+                    }
+                }
+            }
+            return gameInfo;
         }
     }
 }

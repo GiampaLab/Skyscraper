@@ -28,7 +28,6 @@ namespace Skyscraper
             for (var i = 0; i < symbolsForEachCard; i++)
             {
                 var line = new Line(currentSymbolId);
-                //line.ConnectionOrders.Add(0);
                 allSymbols.Add(line);
                 symbols.Add(line);
                 currentSymbolId++;
@@ -57,6 +56,9 @@ namespace Skyscraper
             foreach (var pointToConnect in points.Where(point => !addedPoints.Contains(point) && point.Lines.Any(l => l.ConnectionOrders.Count == (iteration - 1))))
             {
                 var line = pointToConnect.Lines.Last(l => l.ConnectionOrders.Count == (iteration - 1));
+                var pointsConnectedByLine = points.Where(p => p.Lines.Contains(line));
+                if (pointsConnectedByLine.Any(p => addedPoints.Contains(p)))
+                    continue;
                 conjunctionLine.Add(line);
                 line.ConnectionOrders.Add(iteration);
                 addedPoints.AddRange(points.Where(p => p.Lines.Contains(line)));
@@ -66,10 +68,13 @@ namespace Skyscraper
             foreach (var pointToConnect in points.Where(point => !addedPoints.Contains(point) && point.Lines.Any(l => l.ConnectionOrders.Count == (iteration - 2))))
             {
                 var line = pointToConnect.Lines.Last(l => l.ConnectionOrders.Count == (iteration - 2));
+                var pointsConnectedByLine = points.Where(p => p.Lines.Contains(line));
+                if (pointsConnectedByLine.Any(p => addedPoints.Contains(p)))
+                    continue;
                 conjunctionLine.Add(line);
                 line.ConnectionOrders.Add(iteration);
                 addedPoints.AddRange(points.Where(p => p.Lines.Contains(line)));
-                if (conjunctionLine.Count == connectionsMaxOrder)
+                if (conjunctionLine.Count == numberOfLines)
                     break;
             }
             lines.AddRange(conjunctionLine);

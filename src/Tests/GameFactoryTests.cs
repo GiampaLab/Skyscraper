@@ -13,7 +13,7 @@ namespace Tests
             var sut = new GameFactory();
             var result = sut.Create(8);
 
-            Assert.NotNull(result);
+            Assert.That(result, Is.Not.Null);
         }
     }
 }

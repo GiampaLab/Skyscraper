@@ -6,13 +6,11 @@ namespace Skyscraper
 {
     public class Point : IEquatable<Point>
     {
-        public IEnumerable<Line> Lines { get; private set; }
-        public int Iteration { get; private set; }
+        public IList<Line> Lines { get; private set; }
 
-        public Point(IEnumerable<Line> lines, int iteration)
+        public Point(IList<Line> lines)
         {
             Lines = lines;
-            Iteration = iteration;
         }
 
         public bool Equals(Point other)

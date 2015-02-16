@@ -9,12 +9,12 @@ namespace Skyscraper
         public GameInfo Create(int symbolsForEachCard)
         {
             var totalNumberOfSymbols = GetTotalNumberOfSymbols(symbolsForEachCard);
-
+            var cards = GetCards(symbolsForEachCard);
             return new GameInfo
             {
                 SymbolsForEachCard = symbolsForEachCard,
                 TotalNumberOfSymbols = totalNumberOfSymbols,
-                TotalNumberOfCards = totalNumberOfSymbols,
+                TotalNumberOfCards = cards.Count(),
                 Cards = GetCards(symbolsForEachCard)
             };
         }
@@ -32,61 +32,57 @@ namespace Skyscraper
                 symbols.Add(line);
                 currentSymbolId++;
             }
-            cards.Add(new Point(symbols, 0));
-            var geometryOrder = GetOrderOfTheGeometry(symbolsForEachCard);
-            for (var i = 0; i < geometryOrder; i++)
+            cards.Add(new Point(symbols));
+            for (int i = 1; i <= symbolsForEachCard; i++)
             {
-                CreateNewPoint(cards,symbolsForEachCard, i + 1, allSymbols);
+                var currentLine = cards[0].Lines.First(l => l.Id == i);
+                
+                CreateNewPoint(cards, symbolsForEachCard, currentLine);
             }
             return cards;
         }
 
-        private static IEnumerable<Point> CreateNewPoint(IList<Point> points, int numberOfLines, int iteration, IList<Line> allLines)
+        private static IEnumerable<Point> CreateNewPoint(IList<Point> points, int numberOfLines, Line currentLine)
         {
-            var pointsToConnect = points.Count();
-            var connectionsMaxOrder = Math.Floor((decimal)pointsToConnect/iteration);
-            var connectionsMinOrder = pointsToConnect % iteration;
-            var linesToAddCount = numberOfLines - connectionsMaxOrder - connectionsMinOrder;
-            if (linesToAddCount < 0)
+            if (points.Count == currentLine.Id * (numberOfLines - 1) + 1)
                 return points;
 
-            var lines = new List<Line>();
-            var conjunctionLine = new List<Line>();
-            var addedPoints = new List<Point>();
-            foreach (var pointToConnect in points.Where(point => !addedPoints.Contains(point) && point.Lines.Any(l => l.ConnectionOrders.Count == (iteration - 1))))
+            var point = new Point(new List<Line> { currentLine });
+            var conjunctionLines = new List<Line>();
+            var addedPoints = points.Where(p => p.Lines.Contains(currentLine)).ToList();
+            var pointsToConnect = points.Except(points.Where(p => p.Lines.Contains(currentLine)));
+            var pointsToConnectCount = pointsToConnect.Count();
+            //var index = (points.Count - 1)%(numberOfLines - 1);
+            //var connectionsMaxOrderCount = (int)Math.Floor((decimal) (pointsToConnectCount / (numberOfLines - 1)));
+
+            foreach (var pointToConnect in pointsToConnect)
             {
-                var line = pointToConnect.Lines.Last(l => l.ConnectionOrders.Count == (iteration - 1));
-                var pointsConnectedByLine = points.Where(p => p.Lines.Contains(line));
-                if (pointsConnectedByLine.Any(p => addedPoints.Contains(p)))
-                    continue;
-                conjunctionLine.Add(line);
-                line.ConnectionOrders.Add(iteration);
-                addedPoints.AddRange(points.Where(p => p.Lines.Contains(line)));
-                if (conjunctionLine.Count == connectionsMaxOrder)
+                foreach (var line in pointToConnect.Lines)
+                {
+                    var addedLines = addedPoints.SelectMany(p => p.Lines).Distinct().ToList();
+                    var pointsConnectedByLine = points.Where(p => p.Lines.Contains(line)).ToList();
+                    var linesConnectedByLine = pointsConnectedByLine.SelectMany(p => p.Lines).Distinct().ToList();
+                    addedLines.AddRange(linesConnectedByLine);
+                    if (pointsConnectedByLine.Any(p => addedPoints.Contains(p)) || addedPoints.SelectMany(p => p.Lines).Contains(line) ||
+                        (conjunctionLines.Count < numberOfLines - 2 && addedLines.Distinct().ToList().Count == GetTotalNumberOfSymbols(numberOfLines)))
+                        continue;
+                    conjunctionLines.Add(line);
+                    addedPoints.AddRange(pointsConnectedByLine);
                     break;
+                }
             }
-            foreach (var pointToConnect in points.Where(point => !addedPoints.Contains(point) && point.Lines.Any(l => l.ConnectionOrders.Count == (iteration - 2))))
-            {
-                var line = pointToConnect.Lines.Last(l => l.ConnectionOrders.Count == (iteration - 2));
-                var pointsConnectedByLine = points.Where(p => p.Lines.Contains(line));
-                if (pointsConnectedByLine.Any(p => addedPoints.Contains(p)))
-                    continue;
-                conjunctionLine.Add(line);
-                line.ConnectionOrders.Add(iteration);
-                addedPoints.AddRange(points.Where(p => p.Lines.Contains(line)));
-                if (conjunctionLine.Count == numberOfLines)
-                    break;
-            }
-            lines.AddRange(conjunctionLine);
-            var lineId = allLines.Max(l => l.Id);
-            for(var i = 0; i< linesToAddCount; i++)
+
+            ((List<Line>)point.Lines).AddRange(conjunctionLines);
+            var lineId = points.SelectMany(p => p.Lines).Max(l => l.Id);
+            var linesToAddCount = (numberOfLines - 1) - conjunctionLines.Count;
+
+            for (var i = 0; i< linesToAddCount; i++)
             {
                 var newLine = new Line(++lineId);
-                lines.Add(newLine);
-                allLines.Add(newLine);
+                point.Lines.Add(newLine);
             }
-            points.Add(new Point(lines, iteration));
-            return CreateNewPoint(points, numberOfLines, iteration, allLines);
+            points.Add(point);
+            return CreateNewPoint(points, numberOfLines, currentLine);
         }
         private static int GetOrderOfTheGeometry(int symbolsForEachCard)
         {

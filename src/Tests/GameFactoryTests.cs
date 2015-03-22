@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Skyscraper;
+using SkyscraperCore;
 
 namespace Tests
 {

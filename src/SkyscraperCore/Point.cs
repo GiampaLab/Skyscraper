@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Skyscraper
+namespace SkyscraperCore
 {
     public class Point : IEquatable<Point>
     {

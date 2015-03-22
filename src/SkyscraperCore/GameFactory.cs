@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
-namespace Skyscraper
+namespace SkyscraperCore
 {
     public class GameFactory : IGameFactory
     {
@@ -36,7 +37,6 @@ namespace Skyscraper
             for (int i = 1; i <= symbolsForEachCard; i++)
             {
                 var currentLine = cards[0].Lines.First(l => l.Id == i);
-                
                 CreateNewPoint(cards, symbolsForEachCard, currentLine);
             }
             return cards;
@@ -47,25 +47,41 @@ namespace Skyscraper
             if (points.Count == currentLine.Id * (numberOfLines - 1) + 1)
                 return points;
 
-            var point = new Point(new List<Line> { currentLine });
-            var conjunctionLines = new List<Line>();
+            var iteration = (points.Count - 1) % (numberOfLines - 1);
+            var point = new Point(new List<Line>());
+            var conjunctionLines = new List<Line> { currentLine };
             var addedPoints = points.Where(p => p.Lines.Contains(currentLine)).ToList();
             var pointsToConnect = points.Except(points.Where(p => p.Lines.Contains(currentLine)));
             var pointsToConnectCount = pointsToConnect.Count();
-            //var index = (points.Count - 1)%(numberOfLines - 1);
-            //var connectionsMaxOrderCount = (int)Math.Floor((decimal) (pointsToConnectCount / (numberOfLines - 1)));
+
+            var connectionsMaxOrderCount = (int)Math.Floor((decimal) (pointsToConnectCount / (numberOfLines - 1)));
 
             foreach (var pointToConnect in pointsToConnect)
             {
-                foreach (var line in pointToConnect.Lines)
+                var i = 0;
+                while(conjunctionLines.Count < numberOfLines)
                 {
+                    var line = pointToConnect.Lines[i];
                     var addedLines = addedPoints.SelectMany(p => p.Lines).Distinct().ToList();
                     var pointsConnectedByLine = points.Where(p => p.Lines.Contains(line)).ToList();
                     var linesConnectedByLine = pointsConnectedByLine.SelectMany(p => p.Lines).Distinct().ToList();
+                    var newLines = linesConnectedByLine.Where(l => !addedLines.Contains(l)).ToList();
                     addedLines.AddRange(linesConnectedByLine);
+                    var guess = ((numberOfLines - conjunctionLines.Count - 1) * (numberOfLines - iteration) - numberOfLines + 1 + conjunctionLines.Count);
                     if (pointsConnectedByLine.Any(p => addedPoints.Contains(p)) || addedPoints.SelectMany(p => p.Lines).Contains(line) ||
-                        (conjunctionLines.Count < numberOfLines - 2 && addedLines.Distinct().ToList().Count == GetTotalNumberOfSymbols(numberOfLines)))
+                        (conjunctionLines.Count < numberOfLines - 1 && addedLines.Distinct().ToList().Count == GetTotalNumberOfSymbols(numberOfLines)))
+                    {
+                        i++;
                         continue;
+                    }
+                    var totalPoints = pointsConnectedByLine.Count + addedPoints.Count;
+                    Debug.WriteLine("Total number of points: " + totalPoints);
+                    Debug.WriteLine("Lines left guess: " + (GetTotalNumberOfSymbols(numberOfLines) - ((numberOfLines -1) + (totalPoints - 1)*numberOfLines)));
+                    Debug.WriteLine("Lines Available: " + (GetTotalNumberOfSymbols(numberOfLines) - addedLines.Distinct().ToList().Count));
+                    Debug.WriteLine("Connection order: " + connectionsMaxOrderCount);
+                    Debug.WriteLine("Origin line: " + currentLine.Id);
+                    Debug.WriteLine("Line Added: " + line.Id);
+                    Debug.WriteLine("");
                     conjunctionLines.Add(line);
                     addedPoints.AddRange(pointsConnectedByLine);
                     break;
@@ -74,7 +90,7 @@ namespace Skyscraper
 
             ((List<Line>)point.Lines).AddRange(conjunctionLines);
             var lineId = points.SelectMany(p => p.Lines).Max(l => l.Id);
-            var linesToAddCount = (numberOfLines - 1) - conjunctionLines.Count;
+            var linesToAddCount = numberOfLines - conjunctionLines.Count;
 
             for (var i = 0; i< linesToAddCount; i++)
             {

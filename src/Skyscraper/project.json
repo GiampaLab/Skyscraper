@@ -21,6 +21,7 @@
 		"Microsoft.AspNet.StaticFiles": "1.0.0-beta2",
 		"Microsoft.AspNet.Owin": "1.0.0-beta2",
 		"Microsoft.Framework.DependencyInjection": "1.0.0-beta2",
+		"SkyscraperCore": ""
 	},
 	"commands": {
 		"web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:5001",
@@ -28,13 +29,13 @@
 		"test": "Xunit.KRunner"
 	},
 	"frameworks": {
-		"aspnet50": { },
-		"aspnetcore50": {
-			"dependencies": {
-				"System.Linq": "4.0.0-beta-22416" ,
-				"System.Runtime": "4.0.20-beta-22416"
-			}
-		}
+		"aspnet50": { }
+		//"aspnetcore50": {
+		//"dependencies": {
+		//	"System.Linq": "4.0.0-beta-22416" ,
+		//	"System.Runtime": "4.0.20-beta-22416"
+		//}
+		//}
 	},
 	"scripts": {
 		"prebuild": "echo before building",

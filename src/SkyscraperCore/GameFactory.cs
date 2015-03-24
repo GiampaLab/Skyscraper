@@ -10,14 +10,49 @@ namespace SkyscraperCore
         public GameInfo Create(int symbolsForEachCard)
         {
             var totalNumberOfSymbols = GetTotalNumberOfSymbols(symbolsForEachCard);
-            var cards = GetCards(symbolsForEachCard);
+            var cards = GetCards2(symbolsForEachCard);
             return new GameInfo
             {
                 SymbolsForEachCard = symbolsForEachCard,
                 TotalNumberOfSymbols = totalNumberOfSymbols,
                 TotalNumberOfCards = cards.Count(),
-                Cards = GetCards(symbolsForEachCard)
+                Cards = cards
             };
+        }
+
+        private IEnumerable<Point> GetCards2(int symbolsForEachCard)
+        {
+            var cards = new List<Point>();
+            var orderOfTheGeometry = symbolsForEachCard - 1;
+            Point point = null;
+            for (int i = 0; i< orderOfTheGeometry; i++)
+            {
+                point = new Point(new List<Line>());
+                for (int j = 0; j < orderOfTheGeometry; j++)
+                {
+                    point.Lines.Add(new Line(i * orderOfTheGeometry + j));
+                }
+                point.Lines.Add(new Line(orderOfTheGeometry * orderOfTheGeometry + 1));
+                cards.Add(point);
+            }
+            for (int i = 0; i < orderOfTheGeometry; i++)
+            {
+                for (int j = 0; j < orderOfTheGeometry; j++)
+                {
+                    point = new Point(new List<Line>());
+                    for (int k = 0; k < orderOfTheGeometry; k++)
+                    {
+                        point.Lines.Add(new Line(k * orderOfTheGeometry + (j + i * k) % orderOfTheGeometry));
+                    }
+                    point.Lines.Add(new Line(orderOfTheGeometry * orderOfTheGeometry + 2 + i));
+                    cards.Add(point);
+                }
+            }
+            point = new Point(new List<Line>());
+            for (int i = 0; i < orderOfTheGeometry + 1; i++)
+                point.Lines.Add(new Line(orderOfTheGeometry * orderOfTheGeometry + 1 + i));
+            cards.Add(point);
+            return cards;
         }
 
         private IEnumerable<Point> GetCards(int symbolsForEachCard)
@@ -69,7 +104,8 @@ namespace SkyscraperCore
                     addedLines.AddRange(linesConnectedByLine);
                     var guess = ((numberOfLines - conjunctionLines.Count - 1) * (numberOfLines - iteration) - numberOfLines + 1 + conjunctionLines.Count);
                     if (pointsConnectedByLine.Any(p => addedPoints.Contains(p)) || addedPoints.SelectMany(p => p.Lines).Contains(line) ||
-                        (conjunctionLines.Count < numberOfLines - 1 && addedLines.Distinct().ToList().Count == GetTotalNumberOfSymbols(numberOfLines)))
+                        pointsConnectedByLine.Count > numberOfLines -1 ||
+                        (GetTotalNumberOfSymbols(numberOfLines) - addedLines.Distinct().ToList().Count < (numberOfLines - conjunctionLines.Count - 1) ))
                     {
                         i++;
                         continue;

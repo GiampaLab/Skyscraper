@@ -13,7 +13,6 @@ namespace Skyscraper
             services.AddSignalR();
             services.AddMvc();
             services.AddScoped<IGameFactory, GameFactory>();
-            Math.Ceiling(10.0);
         }
 
         public void Configure(IApplicationBuilder app)

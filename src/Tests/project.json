@@ -4,6 +4,8 @@
 		"NUnit": "2.6.4",
 		"NUnitTestAdapter": "1.2.0",
         "NSubstitute": "1.8.1",
+        "Microsoft.AspNet.Server.WebListener": "1.0.0-beta3",
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta3",
         "Skyscraper": ""
     },
 

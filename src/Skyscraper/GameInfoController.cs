@@ -5,7 +5,7 @@ using SkyscraperCore;
 namespace Skyscraper
 {
     [Route("api/[controller]")]
-    public class GameInfoController
+    public class GameInfoController : Controller
     {
         private readonly IGameFactory _gameFactory;
 

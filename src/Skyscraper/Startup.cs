@@ -13,10 +13,17 @@ namespace Skyscraper
             services.AddSignalR();
             services.AddMvc();
             services.AddScoped<IGameFactory, GameFactory>();
+            services.AddScoped<IGame, Game>();
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            app.Use(async (context, next) => {
+                context.Response.Headers.Append("Access-Control-Allow-Origin", "http://localhost:8000");
+                context.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "Content-Type, x-xsrf-token" });
+                context.Response.Headers.Add("Access-Control-Allow-Credentials", new[] { "true" });
+                await next();
+            });
             app.UseSignalR();
             app.UseMvc();
             app.Map("/signalr", map =>
@@ -32,6 +39,7 @@ namespace Skyscraper
                 // path.
                 map.RunSignalR();
             });
+            
         }
     }
 }

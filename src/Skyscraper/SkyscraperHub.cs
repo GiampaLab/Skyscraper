@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using SkyscraperCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Skyscraper
 {
@@ -8,20 +11,26 @@ namespace Skyscraper
         // Is set via the constructor on each creation
         private readonly IHubContext _hubContext;
         private BasicShapeModel _model;
-        /*public SkyscraperHub()
-            : this(Broadcaster.Instance)
-        {
-        }*/
-        public SkyscraperHub(IConnectionManager connectionManager)
+        private readonly IGame _game;
+        private GameInfo _gameInfo;
+        private IList<Point> _usedCards;
+        public SkyscraperHub(IConnectionManager connectionManager, IGame game)
         {
             _hubContext = connectionManager.GetHubContext<SkyscraperHub>();
-            _model = new BasicShapeModel();
+            _game = game;
         }
         public void UpdateModel(BasicShapeModel clientModel)
         {
             clientModel.LastUpdatedBy = Context.ConnectionId;
             _model = clientModel;
             _hubContext.Clients.AllExcept(_model.LastUpdatedBy).updateShape(_model);
+        }
+
+        public void InitGame(int symbols)
+        {
+            _game.Init(symbols);
+            var card = _game.GetFirstCard();
+            Clients.Client(Context.ConnectionId).start(card.Lines.Select(l => l.Id));
         }
 
         public void AddBox()

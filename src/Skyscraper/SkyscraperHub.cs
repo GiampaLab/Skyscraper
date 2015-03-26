@@ -29,8 +29,19 @@ namespace Skyscraper
         public void InitGame(int symbols)
         {
             _game.Init(symbols);
-            var card = _game.GetFirstCard();
+            var card = _game.DistributeFirstCard(Context.ConnectionId);
             Clients.Client(Context.ConnectionId).start(card.Lines.Select(l => l.Id));
+        }
+
+        public void ExtractCard()
+        {
+            var symbols = _game.ExtractCard().Lines.Select(l => l.Id);
+            Clients.All.setExtractedCard(symbols);
+        }
+
+        public void CardMatched(IEnumerable<int> symbols)
+        {
+            _game.AddCardToPlayer(Context.ConnectionId, new Point(symbols.Select(s => new Line(s)).ToList()));
         }
 
         public void AddBox()

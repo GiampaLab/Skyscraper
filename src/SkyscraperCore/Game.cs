@@ -9,17 +9,52 @@ namespace SkyscraperCore
         private IGameFactory _gameFactory;
         private GameInfo _gameInfo;
         private IList<Point> _usedCards;
+        private IList<Player> _players; 
         public Game(IGameFactory gameFactory)
         {
             _gameFactory = gameFactory;
             _usedCards = new List<Point>();
+            _players = new List<Player>();
         }
 
         public void Init(int symbolsNumber) {
             _gameInfo = _gameFactory.Create(symbolsNumber);
         }
 
-        public Point GetFirstCard()
+        public Point DistributeFirstCard(string playerId)
+        {
+            var player = new Player(playerId);
+            _players.Add(player);
+            var card = GetRandomCard();
+            player.SetCurrentCard(card);
+            return card;
+        }
+
+        public Point ExtractCard()
+        {
+            return GetRandomCard();
+        }
+
+        public void AddCardToPlayer(string playerId, Point card)
+        {
+            var player = _players.FirstOrDefault(p => p.PlayerId == playerId);
+            if (player == null)
+                return;
+            var cardToAdd = _usedCards.FirstOrDefault(c => c == card);
+            if (cardToAdd == null)
+                return;
+            player.SetCurrentCard(cardToAdd);
+        }
+
+        public Point GetPlayerCurrentCard(string playerId)
+        {
+            var player = _players.FirstOrDefault(p => p.PlayerId == playerId);
+            if (player == null)
+                return null;
+            return player.CurrentCard;
+        }
+
+        private Point GetRandomCard()
         {
             var cards = _gameInfo.Cards.ToArray();
             new Random().Shuffle(cards);
@@ -27,7 +62,8 @@ namespace SkyscraperCore
             _usedCards.Add(card);
             var lines = card.Lines.ToArray();
             new Random().Shuffle(lines);
-            return new Point(lines.ToList());
+            var randomizedCard = new Point(lines.ToList());
+            return randomizedCard;
         }
     }
 }

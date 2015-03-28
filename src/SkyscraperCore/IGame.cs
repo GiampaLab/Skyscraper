@@ -8,5 +8,7 @@
         Point ExtractCard();
         void AddCardToPlayer(string playerId, Point card);
         Point GetPlayerCurrentCard(string playerId);
+        GameStats GetGameStats();
+        void StartGame();
     }
 }

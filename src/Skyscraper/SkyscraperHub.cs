@@ -26,6 +26,11 @@ namespace Skyscraper
             _hubContext.Clients.AllExcept(_model.LastUpdatedBy).updateShape(_model);
         }
 
+        public void StartGame()
+        {
+            _game.StartGame();
+        }
+
         public void InitGame(int symbols)
         {
             _game.Init(symbols);
@@ -35,8 +40,17 @@ namespace Skyscraper
 
         public void ExtractCard()
         {
-            var symbols = _game.ExtractCard().Lines.Select(l => l.Id);
-            Clients.All.setExtractedCard(symbols);
+            var card = _game.ExtractCard();
+            if (card == null)
+            {
+                var stats = _game.GetGameStats();
+                Clients.All.gameOver(stats);
+            }
+            else
+            {
+                var symbols = card.Lines.Select(l => l.Id);
+                Clients.All.setExtractedCard(symbols);
+            }
         }
 
         public void CardMatched(IEnumerable<int> symbols)

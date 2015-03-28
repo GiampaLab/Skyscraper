@@ -13,8 +13,12 @@ namespace SkyscraperCore
         public Game(IGameFactory gameFactory)
         {
             _gameFactory = gameFactory;
-            _usedCards = new List<Point>();
-            _players = new List<Player>();
+            SetUp();
+        }
+
+        public void StartGame()
+        {
+            SetUp();
         }
 
         public void Init(int symbolsNumber) {
@@ -54,11 +58,24 @@ namespace SkyscraperCore
             return player.CurrentCard;
         }
 
+        public GameStats GetGameStats()
+        {
+            return new GameStats(_players);
+        }
+
+        private void SetUp()
+        {
+            _usedCards = new List<Point>();
+            _players = new List<Player>();
+        }
+
         private Point GetRandomCard()
         {
             var cards = _gameInfo.Cards.ToArray();
             new Random().Shuffle(cards);
-            var card = cards.First(c => !_usedCards.Contains(c));
+            var card = cards.FirstOrDefault(c => !_usedCards.Contains(c));
+            if (card == null)
+                return null;
             _usedCards.Add(card);
             var lines = card.Lines.ToArray();
             new Random().Shuffle(lines);

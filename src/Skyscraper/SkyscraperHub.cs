@@ -19,12 +19,6 @@ namespace Skyscraper
             _hubContext = connectionManager.GetHubContext<SkyscraperHub>();
             _game = game;
         }
-        public void UpdateModel(BasicShapeModel clientModel)
-        {
-            clientModel.LastUpdatedBy = Context.ConnectionId;
-            _model = clientModel;
-            _hubContext.Clients.AllExcept(_model.LastUpdatedBy).updateShape(_model);
-        }
 
         public void StartGame()
         {
@@ -34,8 +28,11 @@ namespace Skyscraper
         public void InitGame(int symbols)
         {
             _game.Init(symbols);
-            var card = _game.DistributeFirstCard(Context.ConnectionId);
-            Clients.Client(Context.ConnectionId).start(card.Lines.Select(l => l.Id));
+            _game.DistributeFirstCard();
+            foreach(var player in _game.GetPlayers())
+            {
+                Clients.Client(player.ConnectionId).start(player.CurrentCard.Lines.Select(l => l.Id));
+            }
         }
 
         public void ExtractCard()
@@ -49,26 +46,25 @@ namespace Skyscraper
             else
             {
                 var symbols = card.Lines.Select(l => l.Id);
-                Clients.All.setExtractedCard(symbols);
+                Clients.All.setExtractedCard(symbols, GetPlayers());
             }
         }
 
         public void CardMatched(IEnumerable<int> symbols)
         {
             _game.AddCardToPlayer(Context.ConnectionId, new Point(symbols.Select(s => new Line(s)).ToList()));
+            ExtractCard();
         }
 
-        public void AddBox()
+        public void AddPlayer(PlayerViewModel player)
         {
-            //mouseConstraint.LastUpdatedBy = Context.ConnectionId;
-            // Update the shape model within our broadcaster
-            Clients.AllExcept(Context.ConnectionId).updateBox();
+            _game.AddPlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
+            Clients.All.setPlayers(GetPlayers());
         }
-        public void AddCircle()
+
+        private IEnumerable<PlayerViewModel> GetPlayers()
         {
-            //mouseConstraint.LastUpdatedBy = Context.ConnectionId;
-            // Update the shape model within our broadcaster
-            Clients.AllExcept(Context.ConnectionId).updateCircle();
+            return _game.GetPlayers().Select(p => new PlayerViewModel { displayName = p.DisplayName, imageUrl = p.ImageUrl, points = p.Cards.Count, id = p.Id });
         }
     }
 }

@@ -14,6 +14,7 @@ namespace SkyscraperCore
         {
             _gameFactory = gameFactory;
             SetUp();
+            _players = new List<Player>();
         }
 
         public void StartGame()
@@ -25,13 +26,12 @@ namespace SkyscraperCore
             _gameInfo = _gameFactory.Create(symbolsNumber);
         }
 
-        public Point DistributeFirstCard(string playerId)
+        public void DistributeFirstCard()
         {
-            var player = new Player(playerId);
-            _players.Add(player);
-            var card = GetRandomCard();
-            player.SetCurrentCard(card);
-            return card;
+            foreach (var player in _players)
+            {
+                player.SetCurrentCard(GetRandomCard());
+            }
         }
 
         public Point ExtractCard()
@@ -39,20 +39,19 @@ namespace SkyscraperCore
             return GetRandomCard();
         }
 
-        public void AddCardToPlayer(string playerId, Point card)
+        public void AddCardToPlayer(string connectionId, Point card)
         {
-            var player = _players.FirstOrDefault(p => p.PlayerId == playerId);
+            var player = _players.FirstOrDefault(p => p.ConnectionId == connectionId);
             if (player == null)
                 return;
-            var cardToAdd = _usedCards.FirstOrDefault(c => c == card);
-            if (cardToAdd == null)
+            if (card == null)
                 return;
-            player.SetCurrentCard(cardToAdd);
+            player.SetCurrentCard(card);
         }
 
-        public Point GetPlayerCurrentCard(string playerId)
+        public Point GetPlayerCurrentCard(string connectionId)
         {
-            var player = _players.FirstOrDefault(p => p.PlayerId == playerId);
+            var player = _players.FirstOrDefault(p => p.ConnectionId == connectionId);
             if (player == null)
                 return null;
             return player.CurrentCard;
@@ -66,7 +65,18 @@ namespace SkyscraperCore
         private void SetUp()
         {
             _usedCards = new List<Point>();
-            _players = new List<Player>();
+        }
+
+        public void AddPlayer(string displayName, string imageUrl, string connectionId, string id)
+        {
+            if (_players.Any(p => p.Id == id))
+                return;
+            var player = new Player(displayName, imageUrl, connectionId, id);
+            _players.Add(player);
+        }
+        public IList<Player> GetPlayers()
+        {
+            return _players;
         }
 
         private Point GetRandomCard()

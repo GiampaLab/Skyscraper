@@ -5,19 +5,25 @@ namespace SkyscraperCore
 {
     public class Player
     {
-        public string PlayerId { get; private set; }
+        public string Id { get; private set; }
+        public string ConnectionId { get; private set; }
         public Point CurrentCard { get; private set; }
+        public List<Point> Cards { get; private set; }
+        public string DisplayName { get; set; }
+        public string ImageUrl { get; set; }
 
-        private List<Point> cards;
-        public Player(string playerId)
+        public Player(string diaplyName, string imageUrl, string connectionId, string id)
         {
-            this.PlayerId = playerId;
-            cards = new List<Point>();
+            Id = id;
+            ConnectionId = connectionId;
+            DisplayName = diaplyName;
+            ImageUrl = imageUrl;
+            Cards = new List<Point>();
         }
 
         public void SetCurrentCard(Point card)
         {
-            cards.Add(card);
+            Cards.Add(card);
             CurrentCard = card;
         }
     }

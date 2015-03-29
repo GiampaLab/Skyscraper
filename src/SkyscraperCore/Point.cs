@@ -4,16 +4,16 @@ using System.Linq;
 
 namespace SkyscraperCore
 {
-    public class Point : IEquatable<Point>
+    public class Card : IEquatable<Card>
     {
         public IList<Line> Lines { get; private set; }
 
-        public Point(IList<Line> lines)
+        public Card(IList<Line> lines)
         {
             Lines = lines;
         }
 
-        public bool Equals(Point other)
+        public bool Equals(Card other)
         {
             return Lines.All(l => other.Lines.Contains(l));
         }

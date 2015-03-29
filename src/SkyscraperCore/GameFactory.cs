@@ -20,14 +20,14 @@ namespace SkyscraperCore
             };
         }
 
-        private IEnumerable<Point> GetCards2(int symbolsForEachCard)
+        private IEnumerable<Card> GetCards2(int symbolsForEachCard)
         {
-            var cards = new List<Point>();
+            var cards = new List<Card>();
             var orderOfTheGeometry = symbolsForEachCard - 1;
-            Point point = null;
+            Card point = null;
             for (int i = 0; i< orderOfTheGeometry; i++)
             {
-                point = new Point(new List<Line>());
+                point = new Card(new List<Line>());
                 for (int j = 0; j < orderOfTheGeometry; j++)
                 {
                     point.Lines.Add(new Line(i * orderOfTheGeometry + j));
@@ -39,7 +39,7 @@ namespace SkyscraperCore
             {
                 for (int j = 0; j < orderOfTheGeometry; j++)
                 {
-                    point = new Point(new List<Line>());
+                    point = new Card(new List<Line>());
                     for (int k = 0; k < orderOfTheGeometry; k++)
                     {
                         point.Lines.Add(new Line(k * orderOfTheGeometry + (j + i * k) % orderOfTheGeometry));
@@ -48,16 +48,16 @@ namespace SkyscraperCore
                     cards.Add(point);
                 }
             }
-            point = new Point(new List<Line>());
+            point = new Card(new List<Line>());
             for (int i = 0; i < orderOfTheGeometry + 1; i++)
                 point.Lines.Add(new Line(orderOfTheGeometry * orderOfTheGeometry + 1 + i));
             cards.Add(point);
             return cards;
         }
 
-        private IEnumerable<Point> GetCards(int symbolsForEachCard)
+        private IEnumerable<Card> GetCards(int symbolsForEachCard)
         {
-            var cards = new List<Point>();
+            var cards = new List<Card>();
             var symbols = new List<Line>();
             var allSymbols = new List<Line>();
             var currentSymbolId = 1;
@@ -68,7 +68,7 @@ namespace SkyscraperCore
                 symbols.Add(line);
                 currentSymbolId++;
             }
-            cards.Add(new Point(symbols));
+            cards.Add(new Card(symbols));
             for (int i = 1; i <= symbolsForEachCard; i++)
             {
                 var currentLine = cards[0].Lines.First(l => l.Id == i);
@@ -77,13 +77,13 @@ namespace SkyscraperCore
             return cards;
         }
 
-        private static IEnumerable<Point> CreateNewPoint(IList<Point> points, int numberOfLines, Line currentLine)
+        private static IEnumerable<Card> CreateNewPoint(IList<Card> points, int numberOfLines, Line currentLine)
         {
             if (points.Count == currentLine.Id * (numberOfLines - 1) + 1)
                 return points;
 
             var iteration = (points.Count - 1) % (numberOfLines - 1);
-            var point = new Point(new List<Line>());
+            var point = new Card(new List<Line>());
             var conjunctionLines = new List<Line> { currentLine };
             var addedPoints = points.Where(p => p.Lines.Contains(currentLine)).ToList();
             var pointsToConnect = points.Except(points.Where(p => p.Lines.Contains(currentLine)));

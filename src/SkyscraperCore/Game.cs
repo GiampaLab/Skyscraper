@@ -8,8 +8,10 @@ namespace SkyscraperCore
     {
         private IGameFactory _gameFactory;
         private GameInfo _gameInfo;
-        private IList<Point> _usedCards;
-        private IList<Player> _players; 
+        private IList<Card> _cardsOnTable;
+        private IList<Player> _players;
+        public bool _gameStarted;
+
         public Game(IGameFactory gameFactory)
         {
             _gameFactory = gameFactory;
@@ -23,6 +25,7 @@ namespace SkyscraperCore
         }
 
         public void Init(int symbolsNumber) {
+            _gameStarted = true;
             _gameInfo = _gameFactory.Create(symbolsNumber);
         }
 
@@ -34,14 +37,16 @@ namespace SkyscraperCore
             }
         }
 
-        public Point ExtractCard()
+        public Card ExtractCard()
         {
-            return GetRandomCard();
+            var card = GetRandomCard();
+            _cardsOnTable.Add(card);
+            return card;
         }
 
-        public void AddCardToPlayer(string connectionId, Point card)
+        public void AddCardToPlayer(string id, Card card)
         {
-            var player = _players.FirstOrDefault(p => p.ConnectionId == connectionId);
+            var player = _players.FirstOrDefault(p => p.Id == id);
             if (player == null)
                 return;
             if (card == null)
@@ -49,12 +54,12 @@ namespace SkyscraperCore
             player.SetCurrentCard(card);
         }
 
-        public Point GetPlayerCurrentCard(string connectionId)
+        public Card GetPlayerCurrentCard(string id)
         {
-            var player = _players.FirstOrDefault(p => p.ConnectionId == connectionId);
+            var player = _players.FirstOrDefault(p => p.Id == id);
             if (player == null)
                 return null;
-            return player.CurrentCard;
+            return player.Cards.Last();
         }
 
         public GameStats GetGameStats()
@@ -64,7 +69,7 @@ namespace SkyscraperCore
 
         private void SetUp()
         {
-            _usedCards = new List<Point>();
+            _cardsOnTable = new List<Card>();
         }
 
         public void AddPlayer(string displayName, string imageUrl, string connectionId, string id)
@@ -72,24 +77,39 @@ namespace SkyscraperCore
             if (_players.Any(p => p.Id == id))
                 return;
             var player = new Player(displayName, imageUrl, connectionId, id);
+            if (_gameStarted)
+                player.SetCurrentCard(GetRandomCard());
             _players.Add(player);
         }
+
+        public Card CurrentlyExtractedCard()
+        {
+            return _cardsOnTable.Last();
+        }
+
         public IList<Player> GetPlayers()
         {
             return _players;
         }
+        public bool GameStarted()
+        {
+            return _gameStarted;
+        }
 
-        private Point GetRandomCard()
+        private Card GetRandomCard()
         {
             var cards = _gameInfo.Cards.ToArray();
             new Random().Shuffle(cards);
-            var card = cards.FirstOrDefault(c => !_usedCards.Contains(c));
+            var card = cards.FirstOrDefault();
             if (card == null)
+            {
+                _gameStarted = false;
                 return null;
-            _usedCards.Add(card);
+            }
+            _gameInfo.Cards = cards.Where(c => c != card).ToList();
             var lines = card.Lines.ToArray();
             new Random().Shuffle(lines);
-            var randomizedCard = new Point(lines.ToList());
+            var randomizedCard = new Card(lines.ToList());
             return randomizedCard;
         }
     }

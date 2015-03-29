@@ -7,8 +7,7 @@ namespace SkyscraperCore
     {
         public string Id { get; private set; }
         public string ConnectionId { get; private set; }
-        public Point CurrentCard { get; private set; }
-        public List<Point> Cards { get; private set; }
+        public List<Card> Cards { get; private set; }
         public string DisplayName { get; set; }
         public string ImageUrl { get; set; }
 
@@ -18,13 +17,12 @@ namespace SkyscraperCore
             ConnectionId = connectionId;
             DisplayName = diaplyName;
             ImageUrl = imageUrl;
-            Cards = new List<Point>();
+            Cards = new List<Card>();
         }
 
-        public void SetCurrentCard(Point card)
+        public void SetCurrentCard(Card card)
         {
             Cards.Add(card);
-            CurrentCard = card;
         }
     }
 }

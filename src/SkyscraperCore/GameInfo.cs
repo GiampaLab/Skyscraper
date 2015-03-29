@@ -7,6 +7,6 @@ namespace SkyscraperCore
         public int SymbolsForEachCard { get; set; }
         public int TotalNumberOfSymbols { get; set; }
         public int TotalNumberOfCards { get; set; }
-        public IEnumerable<Point> Cards { get; set; }
+        public IEnumerable<Card> Cards { get; set; }
     }
 }

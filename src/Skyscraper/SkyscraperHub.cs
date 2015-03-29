@@ -13,7 +13,7 @@ namespace Skyscraper
         private BasicShapeModel _model;
         private readonly IGame _game;
         private GameInfo _gameInfo;
-        private IList<Point> _usedCards;
+        private IList<Card> _usedCards;
         public SkyscraperHub(IConnectionManager connectionManager, IGame game)
         {
             _hubContext = connectionManager.GetHubContext<SkyscraperHub>();
@@ -31,7 +31,7 @@ namespace Skyscraper
             _game.DistributeFirstCard();
             foreach(var player in _game.GetPlayers())
             {
-                Clients.Client(player.ConnectionId).start(player.CurrentCard.Lines.Select(l => l.Id));
+                Clients.Client(player.ConnectionId).start(_game.GetPlayerCurrentCard(player.Id).Lines.Select(l => l.Id));
             }
         }
 
@@ -50,9 +50,9 @@ namespace Skyscraper
             }
         }
 
-        public void CardMatched(IEnumerable<int> symbols)
+        public void CardMatched(IEnumerable<int> symbols, string id)
         {
-            _game.AddCardToPlayer(Context.ConnectionId, new Point(symbols.Select(s => new Line(s)).ToList()));
+            _game.AddCardToPlayer(id, new Card(symbols.Select(s => new Line(s)).ToList()));
             ExtractCard();
         }
 
@@ -60,6 +60,13 @@ namespace Skyscraper
         {
             _game.AddPlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
             Clients.All.setPlayers(GetPlayers());
+            if (_game.GameStarted())
+            {
+                //joining the current game
+                var card = _game.CurrentlyExtractedCard();
+                var symbols = card.Lines.Select(l => l.Id);
+                Clients.Client(Context.ConnectionId).joinGame(symbols, _game.GetPlayerCurrentCard(player.id).Lines.Select(l => l.Id));
+            }
         }
 
         private IEnumerable<PlayerViewModel> GetPlayers()

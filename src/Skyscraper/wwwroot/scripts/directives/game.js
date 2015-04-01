@@ -8,7 +8,9 @@ app.directive('game',['Hub', 'constants',
 			restrict: 'A',
 			link: function(scope, element, attr){
 
-				scope.gameStarted = false;
+			    scope.gameStarted = false;
+
+			    scope.gameOver = false;
 
 				scope.players = [];
 
@@ -21,9 +23,12 @@ app.directive('game',['Hub', 'constants',
 				scope.hub = new Hub('skyscraperHub', {
 
 					listeners:{
-			            'start': function(symbols){
+					    'start': function (symbols, extractedCardSymbols, players) {
+					        scope.gameOver = false;
 			            	scope.gameStarted = true;
 			            	scope.currentCard = initSymbols(symbols);
+			            	scope.extractedCard = initSymbols(extractedCardSymbols);
+			            	setPlayerPoints(players);
 			            	scope.$apply();
 			            },
 			            'setExtractedCard': function(symbols, players){
@@ -31,16 +36,13 @@ app.directive('game',['Hub', 'constants',
 			            		scope.currentCard = scope.extractedCard;	
 			            	}
 			            	scope.extractedCard = initSymbols(symbols);
-			            	angular.forEach(players, function(p){
-			            		var player = _.find(scope.players, function(pl){
-			            			return pl.id === p.id;
-			            		})
-			            		player.points = p.points;
-			            	})
+			            	setPlayerPoints(players);
 			            	scope.$apply();
 			            },
-			            'gameOver': function(gameStats){
-			            	scope.gameStarted = false;
+			            'gameOver': function (gameStats) {
+			                scope.gameStats = gameStats;
+			                scope.gameStarted = false;
+			                scope.gameOver = true;
 		            		scope.$apply();
 			            },
 			            'setPlayers': function(players){
@@ -51,6 +53,7 @@ app.directive('game',['Hub', 'constants',
 			            	scope.extractedCard = initSymbols(currentlyExtractedCard);
 			            	scope.currentCard = initSymbols(playerCurrentCard);
 			            	scope.gameStarted = true;
+			            	scope.gameOver = false;
 			            	scope.$apply();
 			            }
 					},
@@ -68,7 +71,7 @@ app.directive('game',['Hub', 'constants',
 
                 scope.startGame = function(){
                 	scope.gameStarted = true;
-                	scope.hub.startGame(8);
+                	scope.hub.startGame(4);
                 }
 
                 scope.select = function(symbol){
@@ -89,18 +92,27 @@ app.directive('game',['Hub', 'constants',
                 	}
                 });
 
+                scope.$on('logout', function () {
+                    scope.login = false;
+                    scope.players = _.reject(scope.players, function (p) {
+                        return p.displayName = scope.currentPlayer.displayName;
+                    });
+                });
+
                 function execLogin(info){
                 	scope.currentPlayer = {displayName: info.displayName, imageUrl: info.image.url, id: info.id};
             		scope.login = true;
             		scope.hub.addPlayer({displayName: info.displayName, imageUrl: info.image.url, id: info.id});
                 }
 
-                scope.$on('logout', function(){
-            		scope.login = false;
-            		scope.players = _.reject(scope.players, function(p){
-            			return p.displayName = scope.currentPlayer.displayName;
-            		});
-                });
+                function setPlayerPoints(players) {
+                    angular.forEach(players, function (p) {
+                        var player = _.find(scope.players, function (pl) {
+                            return pl.id === p.id;
+                        })
+                        player.points = p.points;
+                    });
+                }
 
 				var initSymbols = function(symbols){
 					var symbolsArray = [];

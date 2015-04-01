@@ -32,7 +32,14 @@
 
         <div class="container">
             <div class="panel panel-default" ng-if="login">
-                <div class="panel-heading">Players</div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-2">
+                            Players
+                        </div>
+                        <div class="col-md-8 text-center" ng-if="gameOver">{{gameStats.winner}} won with {{gameStats.points}} points - Game Over!</div>
+                    </div>
+                </div>
               <div class="panel-body flexContainer">
                 <div class="col-md-3" ng-repeat="player in players">
                     <div class="col-md-3">

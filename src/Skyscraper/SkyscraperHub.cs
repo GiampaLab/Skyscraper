@@ -27,11 +27,12 @@ namespace Skyscraper
             _game.StartGame();
             _game.Init(symbols);
             _game.DistributeFirstCard();
+            var card = _game.ExtractCard();
+            var extractedCardsymbols = card.Lines.Select(l => l.Id);
             foreach (var player in _game.GetPlayers())
             {
-                Clients.Client(player.ConnectionId).start(_game.GetPlayerCurrentCard(player.Id).Lines.Select(l => l.Id));
+                Clients.Client(player.ConnectionId).start(_game.GetPlayerCurrentCard(player.Id).Lines.Select(l => l.Id), extractedCardsymbols, GetPlayers());
             }
-            ExtractCard();
         }
 
         public void ExtractCard()

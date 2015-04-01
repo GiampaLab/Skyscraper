@@ -14,25 +14,24 @@ namespace Skyscraper
         private readonly IGame _game;
         private GameInfo _gameInfo;
         private IList<Card> _usedCards;
+        private static bool tooLate;
+
         public SkyscraperHub(IConnectionManager connectionManager, IGame game)
         {
             _hubContext = connectionManager.GetHubContext<SkyscraperHub>();
             _game = game;
         }
 
-        public void StartGame()
+        public void StartGame(int symbols)
         {
             _game.StartGame();
-        }
-
-        public void InitGame(int symbols)
-        {
             _game.Init(symbols);
             _game.DistributeFirstCard();
-            foreach(var player in _game.GetPlayers())
+            foreach (var player in _game.GetPlayers())
             {
                 Clients.Client(player.ConnectionId).start(_game.GetPlayerCurrentCard(player.Id).Lines.Select(l => l.Id));
             }
+            ExtractCard();
         }
 
         public void ExtractCard()
@@ -52,8 +51,12 @@ namespace Skyscraper
 
         public void CardMatched(IEnumerable<int> symbols, string id)
         {
+            if (tooLate)
+                return;
+            tooLate = true;
             _game.AddCardToPlayer(id, new Card(symbols.Select(s => new Line(s)).ToList()));
             ExtractCard();
+            tooLate = false;
         }
 
         public void AddPlayer(PlayerViewModel player)

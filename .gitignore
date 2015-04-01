@@ -9,3 +9,8 @@ artifacts/
 .vs/
 Skyscraper.sln.DotSettings.user
 src/Skyscraper/wwwroot/bin/
+src/Skyscraper/bin/
+src/Skyscraper/wwwroot/bower_components/
+src/Skyscraper/node_modules/
+src/Skyscraper/wwwroot/config.js
+src/Skyscraper/Properties/PublishProfiles/matchup.pubxml

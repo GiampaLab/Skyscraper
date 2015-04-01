@@ -19,7 +19,7 @@ namespace Skyscraper
         public void Configure(IApplicationBuilder app)
         {
             app.Use(async (context, next) => {
-                context.Response.Headers.Append("Access-Control-Allow-Origin", "http://localhost:8000");
+                context.Response.Headers.Append("Access-Control-Allow-Origin", "http://192.168.0.3:8088");
                 context.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "Content-Type, x-xsrf-token" });
                 context.Response.Headers.Add("Access-Control-Allow-Credentials", new[] { "true" });
                 await next();

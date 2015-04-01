@@ -24,5 +24,10 @@ namespace SkyscraperCore
         {
             Cards.Add(card);
         }
+
+        public void ResetCards()
+        {
+            Cards = new List<Card>();
+        }
     }
 }

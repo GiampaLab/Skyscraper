@@ -15,8 +15,8 @@ namespace SkyscraperCore
         public Game(IGameFactory gameFactory)
         {
             _gameFactory = gameFactory;
-            SetUp();
             _players = new List<Player>();
+            SetUp();
         }
 
         public void StartGame()
@@ -69,6 +69,10 @@ namespace SkyscraperCore
 
         private void SetUp()
         {
+            foreach (var player in _players)
+            {
+                player.ResetCards();
+            }
             _cardsOnTable = new List<Card>();
         }
 

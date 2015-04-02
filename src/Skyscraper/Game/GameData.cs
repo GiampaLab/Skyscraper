@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Skyscraper
+namespace Skyscraper.Game
 {
     public class GameData
     {

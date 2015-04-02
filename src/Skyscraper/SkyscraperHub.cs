@@ -10,7 +10,6 @@ namespace Skyscraper
     {
         // Is set via the constructor on each creation
         private readonly IHubContext _hubContext;
-        private BasicShapeModel _model;
         private readonly IGame _game;
         private GameInfo _gameInfo;
         private IList<Card> _usedCards;

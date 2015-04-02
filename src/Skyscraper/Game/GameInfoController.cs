@@ -2,7 +2,7 @@
 using Microsoft.AspNet.Mvc;
 using SkyscraperCore;
 
-namespace Skyscraper
+namespace Skyscraper.Game
 {
     [Route("api/[controller]")]
     public class GameInfoController : Controller

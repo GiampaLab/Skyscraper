@@ -13,7 +13,7 @@ namespace Skyscraper
             services.AddSignalR();
             services.AddMvc();
             services.AddScoped<IGameFactory, GameFactory>();
-            services.AddScoped<IGame, Game>();
+            services.AddScoped<IGame, SkyscraperCore.Game>();
         }
 
         public void Configure(IApplicationBuilder app)

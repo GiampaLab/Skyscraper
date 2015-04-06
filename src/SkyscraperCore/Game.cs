@@ -18,13 +18,9 @@ namespace SkyscraperCore
             _players = new List<Player>();
             SetUp();
         }
-
-        public void StartGame()
-        {
-            SetUp();
-        }
-
+        
         public void Init(int symbolsNumber) {
+            SetUp();
             _gameStarted = true;
             _gameInfo = _gameFactory.Create(symbolsNumber);
         }
@@ -78,11 +74,9 @@ namespace SkyscraperCore
 
         public void AddPlayer(string displayName, string imageUrl, string connectionId, string id)
         {
-            if (_players.Any(p => p.Id == id))
+            if (_players.Any(p => p.Id == id) || _gameStarted)
                 return;
             var player = new Player(displayName, imageUrl, connectionId, id);
-            if (_gameStarted)
-                player.SetCurrentCard(GetRandomCard());
             _players.Add(player);
         }
 

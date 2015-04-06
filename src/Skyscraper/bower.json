@@ -2,20 +2,20 @@
     "name": "Skyscraper",
     "private": true,
     "dependencies": {
-    "angular": "*",
-    "angular-route": "*",
-    "angular-loader": "*",
-    "angular-mocks": "*",
-    "html5-boilerplate": "*",
-    "angular-signalr-hub": "*",
-    "jquery-ui": "*",
-    "angular-animate": "*",
-    "matter-js": "*",
-    "resurrect-js": "*",
-    "pixi": "*",
-    "bootstrap": "*",
-    "underscore": "*"
-  },
+        "angular": "*",
+        "angular-route": "*",
+        "angular-loader": "*",
+        "angular-mocks": "*",
+        "html5-boilerplate": "*",
+        "angular-signalr-hub": "*",
+        "jquery-ui": "*",
+        "angular-animate": "*",
+        "bootstrap": "*",
+        "underscore": "*",
+        "normalize": "*",
+        "classie": "*",
+        "modernizer": "*"
+    },
     "exportsOverride": {
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using Microsoft.Framework.Runtime;
 using SkyscraperCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,23 +15,26 @@ namespace Skyscraper
         private GameInfo _gameInfo;
         private IList<Card> _usedCards;
         private static bool tooLate;
+        private ISymbolsProvider _symbolsProvider;
 
-        public SkyscraperHub(IConnectionManager connectionManager, IGame game)
+        public SkyscraperHub(IConnectionManager connectionManager, IApplicationEnvironment appEnvironment, IGame game, ISymbolsProvider symbolsProvider)
         {
             _hubContext = connectionManager.GetHubContext<SkyscraperHub>();
             _game = game;
+            _symbolsProvider = symbolsProvider;
+            var basePath = appEnvironment.ApplicationBasePath;
+            _symbolsProvider.Init(basePath + "/wwwroot", "/content/icons");
         }
 
         public void StartGame(int symbols)
         {
-            _game.StartGame();
             _game.Init(symbols);
             _game.DistributeFirstCard();
             var card = _game.ExtractCard();
-            var extractedCardsymbols = card.Lines.Select(l => l.Id);
+            var extractedCardsymbols = GetSymbols(card);
             foreach (var player in _game.GetPlayers())
             {
-                Clients.Client(player.ConnectionId).start(_game.GetPlayerCurrentCard(player.Id).Lines.Select(l => l.Id), extractedCardsymbols, GetPlayers());
+                Clients.Client(player.ConnectionId).start(GetSymbols(_game.GetPlayerCurrentCard(player.Id)), extractedCardsymbols, GetPlayers());
             }
         }
 
@@ -44,10 +48,12 @@ namespace Skyscraper
             }
             else
             {
-                var symbols = card.Lines.Select(l => l.Id);
+                var symbols = GetSymbols(card);
                 Clients.All.setExtractedCard(symbols, GetPlayers());
             }
         }
+
+        
 
         public void CardMatched(IEnumerable<int> symbols, string id)
         {
@@ -61,20 +67,26 @@ namespace Skyscraper
 
         public void AddPlayer(PlayerViewModel player)
         {
-            _game.AddPlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
-            Clients.All.setPlayers(GetPlayers());
-            if (_game.GameStarted())
+            if (!_game.GameStarted())
+                _game.AddPlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
+            else
             {
                 //joining the current game
                 var card = _game.CurrentlyExtractedCard();
-                var symbols = card.Lines.Select(l => l.Id);
-                Clients.Client(Context.ConnectionId).joinGame(symbols, _game.GetPlayerCurrentCard(player.id).Lines.Select(l => l.Id));
+                var symbols = GetSymbols(card);
+                Clients.Client(Context.ConnectionId).joinGame(symbols, GetSymbols(_game.GetPlayerCurrentCard(player.id)));
             }
+            Clients.All.setPlayers(GetPlayers());
         }
 
         private IEnumerable<PlayerViewModel> GetPlayers()
         {
             return _game.GetPlayers().Select(p => new PlayerViewModel { displayName = p.DisplayName, imageUrl = p.ImageUrl, points = p.Cards.Count, id = p.Id });
+        }
+
+        private IEnumerable<Symbol> GetSymbols(Card card)
+        {
+            return card.Lines.Select(l => _symbolsProvider.GetSymbol(l.Id));
         }
     }
 }

@@ -4,9 +4,9 @@
     "authors": [ "Giampa" ],
     "description": "Still don't know..",
     "exclude": [
-        "wwwroot","bin","node_modules"
+        "wwwroot","bin","node_modules","bower_components"
     ],
-    "packExclude": [
+    "bundleExclude": [
         "node_modules",
         "bower_components",
         "**.kproj",
@@ -21,8 +21,7 @@
         "Microsoft.AspNet.StaticFiles": "1.0.0-beta3",
         "Microsoft.AspNet.Owin": "1.0.0-beta3",
         "Microsoft.Framework.DependencyInjection": "1.0.0-beta3",
-        "SkyscraperCore": "",
-        "kre-clr-win-x64": "1.0.0-beta3"
+        "SkyscraperCore": ""
     },
     "commands": {
         "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:5001",

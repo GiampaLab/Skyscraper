@@ -14,6 +14,7 @@ namespace Skyscraper
             services.AddMvc();
             services.AddScoped<IGameFactory, GameFactory>();
             services.AddScoped<IGame, SkyscraperCore.Game>();
+            services.AddScoped<ISymbolsProvider, SymbolsProvider>();
         }
 
         public void Configure(IApplicationBuilder app)

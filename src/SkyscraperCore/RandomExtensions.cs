@@ -2,7 +2,7 @@
 
 namespace SkyscraperCore
 {
-    static class RandomExtensions
+    public static class RandomExtensions
     {
         public static void Shuffle<T>(this Random rng, T[] array)
         {

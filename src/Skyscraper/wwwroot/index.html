@@ -60,7 +60,7 @@
                 <div class="bs-glyphicons">
                     <ul class="bs-glyphicons-list flexContainer">
                         <li ng-repeat="symbol in extractedCard" ng-click="select(symbol)">
-                            <img ng-src="{{symbol.value}}" class="glyphicon"></img>
+                            <img ng-src="{{symbol.path}}" class="glyphicon" />
                         </li>
                     </ul>
                 </div>
@@ -72,7 +72,7 @@
                     <div class="bs-glyphicons-current">
                         <ul class="bs-glyphicons-list flexContainer">
                             <li ng-repeat="symbol in currentCard">
-                              <img ng-src="{{symbol.value}}" class="glyphicon"></img>
+                              <img ng-src="{{symbol.path}}" class="glyphicon"/>
                             </li>
                         </ul>
                     </div>
@@ -85,15 +85,16 @@
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-animate/angular-animate.js"></script>
         <script src="bower_components/angular-signalr-hub/signalr-hub.js"></script>
-        <script src="bower_components/matter-js/build/matter-0.8.0.js"></script>
-        <script src="bower_components/resurrect-js/resurrect.js"></script>
-        <script src="bower_components/pixi/bin/pixi.js"></script>
         <script src="bower_components/underscore/underscore-min.js"></script>
         <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="bower_components/normalize/normalize.min.js"></script>
+        <script src="bower_components/classie/classie.js"></script>
+        <script src="bower_components/modernizer/modernizr.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/directives/game.js"></script>
         <script src="scripts/directives/googleAuth.js"></script>
         <script src="scripts/factories/shapeModelFactory.js"></script>
+        <script src="scripts/buttonsAnimjs.js"></script>
         <script src="config.js"></script>
     </body>
 </html>

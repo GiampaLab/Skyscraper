@@ -8,29 +8,51 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        clean: ["dist", '.tmp'],
+        clean: ["./wwwroot/dist/", '.tmp'],
 
         copy: {
             main: {
                 expand: true,
-                cwd: 'app/',
+                cwd: './wwwroot/',
                 src: ['**', '!**/*.css'],
-                dest: 'dist/'
+                dest: './wwwroot/dist/'
             }
         },
 
         rev: {
             files: {
-                src: ['dist/**/*.{js,css}']
+                src: ['./wwwroot/dist/**/*.{js,css}']
+            }
+        },
+        
+        concat: {
+            options: {
+                separator: ';'
+            },
+            dist: {
+                src: ['./wwwroot/**/*.js'],
+                dest: './wwwroot/dist/<%= pkg.name %>.js'
             }
         },
 
+        cssmin: {
+            target: {
+                files: [{
+                    expand: true,
+                    cwd: './wwwroot\content',
+                    src: ['*.css', '!*.min.css'],
+                    dest: './wwwroot\dist\content',
+                    ext: '.min.css'
+                }]
+            }
+        },
+        
         useminPrepare: {
-            html: 'app/index.html'
+            html: './wwwroot/index.html'
         },
 
         usemin: {
-            html: ['dist/index.html']
+            html: ['./wwwroot/dist/index.html']
         },
 
         uglify: {

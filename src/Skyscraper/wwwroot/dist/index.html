@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html ng-app="skyscraper">
+    <head>
+        <link rel="stylesheet" type="text/css" href="content/main.css">
+        <link rel="stylesheet" type="text/css" href="content/buttons.css">
+        <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    </head>
+    <body game>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"><h1>Skyscraper</h1></a>
+                    
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-form navbar-right">
+                        <li>
+                            <!--<button class="btn btn-default" type="submit" ng-disabled="gameStarted || !login" ng-click="startGame()">Start game</button>-->
+                            <button class="button button--border-thin button--text-thick" type="submit" ng-disabled="gameStarted || !login" ng-class="{buttonujarak: !gameStarted && login}" ng-click="startGame()"><i class="button__icon icon icon-plus"></i><span>Start new game</span></button>
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-1">
+                            Players
+                        </div>
+                        <div class="col-md-1">
+                            <gplus></gplus>
+                        </div>
+                        <div class="col-md-8 text-center" ng-hide="!gameOver">{{gameStats.winner}} won with {{gameStats.points}} points - Game Over!</div>
+                    </div>
+                </div>
+              <div class="panel-body flexContainer">
+                <div class="col-md-3" ng-repeat="player in players">
+                    <div class="col-md-3">
+                        <img ng-src="{{player.imageUrl}}">
+                    </div>
+                    <div class="col-md-9">
+                        <a href="#">{{player.displayName}}
+                            <span class="badge">{{player.points}}</span>
+                        </a>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="bs-glyphicons">
+                    <ul class="bs-glyphicons-list flexContainer">
+                        <li ng-repeat="symbol in extractedCard" ng-click="select(symbol)">
+                            <img ng-src="{{symbol.path}}" class="glyphicon" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="bs-glyphicons-current">
+                        <ul class="bs-glyphicons-list flexContainer">
+                            <li ng-repeat="symbol in currentCard">
+                              <img ng-src="{{symbol.path}}" class="glyphicon"/>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="bower_components/jquery/dist/cf26f8f0.jquery.js"></script>
+        <script src="bower_components/jquery-ui/04a4db29.jquery-ui.js"></script>
+        <script src="bower_components/signalr/d6490897.jquery.signalR.js"></script>
+        <script src="bower_components/angular/f6072173.angular.js"></script>
+        <script src="bower_components/angular-animate/3e74c70a.angular-animate.js"></script>
+        <script src="bower_components/angular-signalr-hub/ba03a1f9.signalr-hub.js"></script>
+        <script src="bower_components/underscore/b0e9839a.underscore-min.js"></script>
+        <script src="bower_components/bootstrap/dist/js/8c237312.bootstrap.min.js"></script>
+        <script src="bower_components/normalize/05425a80.normalize.min.js"></script>
+        <script src="bower_components/classie/5e1ed2c5.classie.js"></script>
+        <script src="bower_components/modernizer/fa256f3c.modernizr.js"></script>
+        <script src="scripts/2788dc8b.app.js"></script>
+        <script src="scripts/directives/e45d4a55.game.js"></script>
+        <script src="scripts/directives/3418eeab.googleAuth.js"></script>
+        <script src="scripts/factories/fedd3d9e.shapeModelFactory.js"></script>
+        <script src="scripts/aa6e46f6.buttonsAnimjs.js"></script>
+        <script src="08da6bd7.config.js"></script>
+    </body>
+</html>

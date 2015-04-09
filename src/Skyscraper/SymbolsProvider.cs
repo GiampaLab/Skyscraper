@@ -24,7 +24,7 @@ namespace Skyscraper
             var i = 0;
             foreach(var icon in icons)
             {
-                symbols.Add(i, icon.Substring(basePath.Length));
+                symbols.Add(i, icon);
                 i++;
             }
         }
@@ -32,8 +32,46 @@ namespace Skyscraper
         public Symbol GetSymbol(int id)
         {
             if(symbols.ContainsKey(id))
-                return new Symbol { Id = id, Path = symbols[id] };
+                return new Symbol { Id = id, Path = "data:image/svg+xml;base64," + GetBase64String(symbols[id]) };
             throw new ArgumentException("Id",string.Format("id {0} not found",id));
+        }
+
+        private string GetBase64String(string imagePath)
+        {
+            FileStream inFile;
+            byte[] binaryData;
+
+            try
+            {
+                inFile = new System.IO.FileStream(imagePath,
+                                          System.IO.FileMode.Open,
+                                          System.IO.FileAccess.Read);
+                binaryData = new Byte[inFile.Length];
+                long bytesRead = inFile.Read(binaryData, 0,
+                                     (int)inFile.Length);
+                inFile.Close();
+            }
+            catch (System.Exception exp)
+            {
+                // Error creating stream or reading from it.
+                return null;
+            }
+
+            // Convert the binary input into Base64 UUEncoded output.
+            string base64String;
+            try
+            {
+                base64String =
+                  System.Convert.ToBase64String(binaryData,
+                                         0,
+                                         binaryData.Length);
+            }
+            catch (System.ArgumentNullException)
+            {
+                // log error
+                return null;
+            }
+            return base64String;
         }
     }
 }

@@ -39,7 +39,7 @@
     },
     "scripts": {
         "prebuild": "echo before building",
-        "postbuild": "echo after building",
+        "postbuild": "grunt deployDev",
         "prepack": "echo before packing",
         "postpack": "echo after packing",
         "prerestore": "echo before restoring packages",

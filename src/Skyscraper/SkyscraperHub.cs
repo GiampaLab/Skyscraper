@@ -23,7 +23,7 @@ namespace Skyscraper
             _game = game;
             _symbolsProvider = symbolsProvider;
             var basePath = appEnvironment.ApplicationBasePath;
-            _symbolsProvider.Init(basePath + "/wwwroot", "/content/icons");
+            _symbolsProvider.Init(basePath, "/content/icons");
         }
 
         public void StartGame(int symbols)

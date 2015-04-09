@@ -29,5 +29,10 @@ namespace SkyscraperCore
         {
             Cards = new List<Card>();
         }
+
+        internal void SetConnectionId(string connectionId)
+        {
+            ConnectionId = connectionId;
+        }
     }
 }

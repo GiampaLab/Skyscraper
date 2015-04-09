@@ -53,8 +53,6 @@ namespace Skyscraper
             }
         }
 
-        
-
         public void CardMatched(IEnumerable<int> symbols, string id)
         {
             if (tooLate)
@@ -72,6 +70,7 @@ namespace Skyscraper
             else
             {
                 //joining the current game
+                _game.UpdatePlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
                 var card = _game.CurrentlyExtractedCard();
                 var symbols = GetSymbols(card);
                 Clients.Client(Context.ConnectionId).joinGame(symbols, GetSymbols(_game.GetPlayerCurrentCard(player.id)));

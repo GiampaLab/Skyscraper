@@ -32,9 +32,6 @@ app.directive('game',['Hub', 'constants',
 			            	scope.$apply();
 			            },
 			            'setExtractedCard': function(symbols, players){
-			            	if(!angular.isUndefined(scope.extractedCard) && scope.extractedCard!== null){
-			            		scope.currentCard = scope.extractedCard;	
-			            	}
 			            	scope.extractedCard = symbols;
 			            	setPlayerPoints(players);
 			            	scope.$apply();
@@ -70,11 +67,14 @@ app.directive('game',['Hub', 'constants',
 				});
 
                 scope.startGame = function(){
-                	scope.hub.startGame(4);
+                	scope.hub.startGame(8);
                 }
 
                 scope.select = function(symbol){
-                	if(_.contains(_.pluck(scope.currentCard,'id'), symbol.id) && !scope.gameOver){
+                    if (_.contains(_.pluck(scope.currentCard, 'id'), symbol.id) && !scope.gameOver) {
+                        if (!angular.isUndefined(scope.extractedCard) && scope.extractedCard !== null) {
+                            scope.currentCard = scope.extractedCard;
+                        }
                 		scope.hub.cardMatched(_.pluck(scope.extractedCard,'id'), scope.currentPlayer.id);
                 	}
                 }

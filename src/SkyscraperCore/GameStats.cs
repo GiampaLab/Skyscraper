@@ -10,7 +10,7 @@ namespace SkyscraperCore
 
         public GameStats(IList<Player> _players)
         {
-            var player = _players.OrderBy(p => p.Cards.Count).First();
+            var player = _players.OrderBy(p => p.Cards.Count).Last();
             winner = player.DisplayName;
             points = player.Cards.Count;
         }

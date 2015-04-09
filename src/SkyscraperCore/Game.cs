@@ -93,6 +93,13 @@ namespace SkyscraperCore
         {
             return _gameStarted;
         }
+        public void UpdatePlayer(string displayName, string imageUrl, string connectionId, string id)
+        {
+            if(_players.Any(p => p.Id == id))
+            {
+                var player = _players.First(p => p.Id == id);
+            }
+        }
 
         private Card GetRandomCard()
         {

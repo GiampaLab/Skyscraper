@@ -23,7 +23,8 @@
                     <ul class="nav navbar-nav navbar-form navbar-right">
                         <li>
                             <!--<button class="btn btn-default" type="submit" ng-disabled="gameStarted || !login" ng-click="startGame()">Start game</button>-->
-                            <button class="button button--border-thin button--text-thick" type="submit" ng-disabled="gameStarted || !login" ng-class="{buttonujarak: !gameStarted && login}" ng-click="startGame()"><i class="button__icon icon icon-plus"></i><span>Start new game</span></button>
+                            <button class="button button--border-thin button--text-thick" type="submit" ng-if="!gameStarted && login" ng-class="{buttonujarak: !gameStarted && login}" ng-click="startGame()"><i class="button__icon icon icon-plus"></i><span>Start new game</span></button>
+                            <button class="button button--border-thin button--text-thick" type="submit" ng-if="gameStarted" ng-class="{buttonujarak: gameStarted}" ng-click="startGame()"><i class="button__icon icon icon-plus"></i><span>Restart game</span></button>
                         </li>
                     </ul>
                 </div>

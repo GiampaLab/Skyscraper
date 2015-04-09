@@ -14,5 +14,6 @@ namespace SkyscraperCore
         void AddPlayer(string displayName, string imageUrl, string connectionId, string id);
         IList<Player> GetPlayers();
         Card CurrentlyExtractedCard();
+        void UpdatePlayer(string displayName, string imageUrl, string connectionId, string id);
     }
 }

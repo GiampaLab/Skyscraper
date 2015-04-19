@@ -8,25 +8,25 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        clean: ["./wwwroot/dist/", '.tmp'],
+        clean: ["./wwwroot/", '.tmp', "./wwwroot/bin/"],
 
         copy: {
             main: {
                 expand: true,
-                cwd: './wwwroot/',
+                cwd: './client/',
                 src: ['**', '!**/*.css'],
-                dest: './wwwroot/dist/'
+                dest: './wwwroot/'
             }
         },
 
         rev: {
             files: {
-                src: ['./wwwroot/dist/css/*.css', './wwwroot/dist/js/*.js']
+                src: ['./wwwroot/css/*.css', './wwwroot/js/*.js']
             }
         },
                 
         useminPrepare: {
-            html: './wwwroot/index.html',
+            html: './client/index.html',
             flow: {
                 html: {
                     steps: {
@@ -36,18 +36,18 @@ module.exports = function (grunt) {
                 }
             },
             options: {
-                dest: './wwwroot/dist/'
+                dest: './wwwroot/'
             }
         },
 
         usemin: {
-            html: ['./wwwroot/dist/index.html']
+            html: ['./wwwroot/index.html']
         },
         
         ngconstant: {
             options: {
                 name: 'config',
-                dest: './wwwroot/config.js'
+                dest: './client/config.js'
             },
             local: {
                 constants: {

@@ -18,3 +18,8 @@ src/Skyscraper/wwwroot/.tmp/,src/Skyscraper/wwwroot/dist/
 src/Skyscraper/wwwroot/dist/
 src/Skyscraper/wwwroot/.tmp/
 src/Skyscraper/.tmp/
+src/Skyscraper/client/dist/bower_components/bootstrap/less/mixins/table-row.less
+src/Skyscraper/client/bower_components/
+src/Skyscraper/wwwroot/css/
+src/Skyscraper/wwwroot/js/
+src/Skyscraper/wwwroot/index.html

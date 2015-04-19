@@ -8,7 +8,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        clean: ["./wwwroot/", '.tmp', "./wwwroot/bin/"],
+        clean: ["./wwwroot/", '.tmp', "!./wwwroot/bin/"],
 
         copy: {
             main: {
@@ -79,6 +79,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-usemin');
 
     // Tell Grunt what to do when we type "grunt" into the terminal
+    grunt.registerTask('deployLocal', ['clean', 'ngconstant:local', 'copy']);
     grunt.registerTask('deployDev', ['clean', 'ngconstant:dev', 'copy', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'rev', 'usemin']);
     grunt.registerTask('deployProd', ['clean', 'ngconstant:prod', 'copy', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'rev', 'usemin']);
 };

@@ -23,3 +23,8 @@ src/Skyscraper/client/bower_components/
 src/Skyscraper/wwwroot/css/
 src/Skyscraper/wwwroot/js/
 src/Skyscraper/wwwroot/index.html
+src/Skyscraper/client/config.js
+src/Skyscraper/wwwroot/scripts/directives/game.js
+src/Skyscraper/wwwroot/scripts/directives/draggable.js
+src/Skyscraper/wwwroot/scripts/
+src/Skyscraper/wwwroot/templates/

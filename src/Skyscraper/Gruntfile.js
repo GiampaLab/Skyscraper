@@ -21,47 +21,29 @@ module.exports = function (grunt) {
 
         rev: {
             files: {
-                src: ['./wwwroot/dist/**/*.{js,css}']
+                src: ['./wwwroot/dist/css/*.css', './wwwroot/dist/js/*.js']
             }
         },
-        
-        concat: {
-            options: {
-                separator: ';'
-            },
-            dist: {
-                src: ['./wwwroot/**/*.js'],
-                dest: './wwwroot/dist/<%= pkg.name %>.js'
-            }
-        },
-
-        cssmin: {
-            target: {
-                files: [{
-                    expand: true,
-                    cwd: './wwwroot\content',
-                    src: ['*.css', '!*.min.css'],
-                    dest: './wwwroot\dist\content',
-                    ext: '.min.css'
-                }]
-            }
-        },
-        
+                
         useminPrepare: {
-            html: './wwwroot/index.html'
+            html: './wwwroot/index.html',
+            flow: {
+                html: {
+                    steps: {
+                        js: ['concat', 'uglify', 'rev'],
+                        css: ['concat', 'cssmin', 'rev']
+                    }
+                }
+            },
+            options: {
+                dest: './wwwroot/dist/'
+            }
         },
 
         usemin: {
             html: ['./wwwroot/dist/index.html']
         },
-
-        uglify: {
-            options: {
-                report: 'min',
-                mangle: false
-            }
-        },
-
+        
         ngconstant: {
             options: {
                 name: 'config',

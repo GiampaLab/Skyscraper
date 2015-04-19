@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html ng-app="skyscraper">
     <head>
+        <!-- build:css css/skyscraper.min.css -->
         <link rel="stylesheet" type="text/css" href="content/main.css">
         <link rel="stylesheet" type="text/css" href="content/buttons.css">
         <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <!-- endbuild -->
     </head>
     <body game>
         <nav class="navbar navbar-default">
@@ -80,6 +82,7 @@
                 </div>
             </div>
         </div>
+        <!-- build:js js/skyscraper.min.js -->
         <script src="bower_components/jquery/dist/jquery.js"></script>
         <script src="bower_components/jquery-ui/jquery-ui.js"></script>
         <script src="bower_components/signalr/jquery.signalR.js"></script>
@@ -91,11 +94,11 @@
         <script src="bower_components/normalize/normalize.min.js"></script>
         <script src="bower_components/classie/classie.js"></script>
         <script src="bower_components/modernizer/modernizr.js"></script>
-        <script src="scripts/app.js"></script>
-        <script src="scripts/directives/game.js"></script>
-        <script src="scripts/directives/googleAuth.js"></script>
-        <script src="scripts/factories/shapeModelFactory.js"></script>
-        <script src="scripts/buttonsAnimjs.js"></script>
         <script src="config.js"></script>
+        <script src="scripts/app.js"></script>
+        <script src="scripts/directives/googleAuth.js"></script>
+        <script src="scripts/directives/game.js"></script>
+        <script src="scripts/buttonsAnimjs.js"></script>
+        <!-- endbuild -->
     </body>
 </html>

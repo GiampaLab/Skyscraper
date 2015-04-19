@@ -1,5 +1,5 @@
 ﻿{
-    "webroot": "wwwroot",
+    "webroot": "wwwroot/dist",
     "version": "1.0.0-*",
     "authors": [ "Giampa" ],
     "description": "Still don't know..",

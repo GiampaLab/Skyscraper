@@ -2,7 +2,7 @@
 
 var app = angular.module('skyscraper');
 
-app.directive('gplus',
+app.directive('gplus',[
   function(Hub, constants){
     var ddo = {
       restrict: 'E',
@@ -81,4 +81,4 @@ app.directive('gplus',
       }
     }
     return ddo;
-  });
+  }]);

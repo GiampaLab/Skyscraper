@@ -44,12 +44,18 @@ namespace Skyscraper
             if (card == null)
             {
                 var stats = _game.GetGameStats();
-                Clients.All.gameOver(stats);
+                foreach (var player in _game.GetPlayers())
+                {
+                    Clients.Client(player.ConnectionId).gameOver(stats);
+                }
             }
             else
             {
                 var symbols = GetSymbols(card);
-                Clients.All.setExtractedCard(symbols, GetPlayers());
+                foreach (var player in _game.GetPlayers())
+                {
+                    Clients.Client(player.ConnectionId).setExtractedCard(symbols, GetPlayers());
+                }
             }
         }
 
@@ -75,7 +81,10 @@ namespace Skyscraper
                 var symbols = GetSymbols(card);
                 Clients.Client(Context.ConnectionId).joinGame(symbols, GetSymbols(_game.GetPlayerCurrentCard(player.id)));
             }
-            Clients.All.setPlayers(GetPlayers());
+            foreach (var p in _game.GetPlayers())
+            {
+                Clients.Client(p.ConnectionId).setPlayers(GetPlayers());
+            }
         }
 
         private IEnumerable<PlayerViewModel> GetPlayers()

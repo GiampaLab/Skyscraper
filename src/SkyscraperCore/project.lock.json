@@ -1,0 +1,39 @@
+{
+  "locked": false,
+  "version": -9998,
+  "projectFileDependencyGroups": {
+    "": [
+      "MathExtension >= 2.0.0"
+    ],
+    "DNX,Version=v4.5.1": []
+  },
+  "libraries": {
+    "MathExtension/2.0.0": {
+      "serviceable": false,
+      "sha": "hqF5G/AELzwnxbyfc49YGMW0oFPNoa3hq3sKloT99m9+hMdvizVfP+eqCN+SPSfzxMJNcXgiPDS3FOM4aNY5Mw==",
+      "frameworks": {
+        "DNX,Version=v4.5.1": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/net45/MathExtension.dll"
+          ],
+          "compileAssemblies": [
+            "lib/net45/MathExtension.dll"
+          ]
+        }
+      },
+      "files": [
+        "MathExtension.2.0.0.nupkg",
+        "MathExtension.2.0.0.nupkg.sha512",
+        "MathExtension.nuspec",
+        "lib/net40/MathExtension.dll",
+        "lib/net40/MathExtension.pdb",
+        "lib/net40/MathExtension.xml",
+        "lib/net45/MathExtension.dll",
+        "lib/net45/MathExtension.pdb",
+        "lib/net45/MathExtension.xml"
+      ]
+    }
+  }
+}

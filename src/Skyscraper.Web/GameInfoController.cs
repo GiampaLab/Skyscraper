@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using Microsoft.AspNet.Mvc;
-using SkyscraperCore;
+﻿using SkyscraperCore;
+using System.Linq;
+using System.Web.Http;
 
-namespace Skyscraper
+namespace Skyscraper.Web
 {
     [Route("api/[controller]")]
-    public class GameInfoController : Controller
+    public class GameInfoController : ApiController
     {
         private readonly IGameFactory _gameFactory;
 

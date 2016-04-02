@@ -4,19 +4,16 @@ using SkyscraperCore;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Skyscraper
+namespace Skyscraper.Web
 {
     public class SkyscraperHub : Hub
     {
         // Is set via the constructor on each creation
-        private readonly IHubContext _hubContext;
-        private BasicShapeModel _model;
         private readonly IGame _game;
         private GameInfo _gameInfo;
         private IList<Card> _usedCards;
-        public SkyscraperHub(IConnectionManager connectionManager, IGame game)
+        public SkyscraperHub(IGame game)
         {
-            _hubContext = connectionManager.GetHubContext<SkyscraperHub>();
             _game = game;
         }
 

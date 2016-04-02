@@ -1,4 +1,4 @@
-﻿namespace Skyscraper
+﻿namespace Skyscraper.Web
 {
     public class PlayerViewModel
     {

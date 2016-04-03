@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SkyscraperCore
+namespace Skyscraper.Core
 {
     public class Game : IGame
     {
@@ -94,6 +94,14 @@ namespace SkyscraperCore
         public bool GameStarted()
         {
             return _gameStarted;
+        }
+        public void ResetGame()
+        {
+            foreach(var player in _players)
+            {
+                player.RestCards();
+            }
+            SetUp();
         }
 
         private Card GetRandomCard()

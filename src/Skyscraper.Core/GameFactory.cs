@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace SkyscraperCore
+namespace Skyscraper.Core
 {
     public class GameFactory : IGameFactory
     {

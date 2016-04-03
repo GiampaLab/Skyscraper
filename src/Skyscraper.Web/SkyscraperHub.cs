@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
-using SkyscraperCore;
+using Skyscraper.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -64,6 +63,11 @@ namespace Skyscraper.Web
                 var symbols = card.Lines.Select(l => l.Id);
                 Clients.Client(Context.ConnectionId).joinGame(symbols, _game.GetPlayerCurrentCard(player.id).Lines.Select(l => l.Id));
             }
+        }
+
+        public void ResetGame()
+        {
+            _game.ResetGame();
         }
 
         private IEnumerable<PlayerViewModel> GetPlayers()

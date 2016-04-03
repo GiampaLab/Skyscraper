@@ -1,4 +1,4 @@
-﻿namespace SkyscraperCore
+﻿namespace Skyscraper.Core
 {
     public interface IGameFactory
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SkyscraperCore
+namespace Skyscraper.Core
 {
     public class Player
     {
@@ -23,6 +23,11 @@ namespace SkyscraperCore
         public void SetCurrentCard(Card card)
         {
             Cards.Add(card);
+        }
+
+        public void RestCards()
+        {
+            Cards = new List<Card>();
         }
     }
 }

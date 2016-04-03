@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SkyscraperCore
+namespace Skyscraper.Core
 {
     public interface IGame
     {
@@ -15,5 +15,6 @@ namespace SkyscraperCore
         void AddPlayer(string displayName, string imageUrl, string connectionId, string id);
         IList<Player> GetPlayers();
         Card CurrentlyExtractedCard();
+        void ResetGame();
     }
 }

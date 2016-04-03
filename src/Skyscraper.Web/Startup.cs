@@ -2,9 +2,9 @@
 using Owin;
 using Autofac;
 using Microsoft.AspNet.SignalR;
-using SkyscraperCore;
 using Autofac.Integration.SignalR;
 using System.Reflection;
+using Skyscraper.Core;
 
 [assembly: OwinStartup(typeof(Skyscraper.Web.Startup))]
 

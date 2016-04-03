@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SkyscraperCore
+namespace Skyscraper.Core
 {
     public class Line : IEquatable<Line>
     {

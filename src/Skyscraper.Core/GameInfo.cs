@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SkyscraperCore
+namespace Skyscraper.Core
 {
     public class GameInfo
     {

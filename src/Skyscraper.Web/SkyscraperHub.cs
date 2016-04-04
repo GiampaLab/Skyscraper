@@ -11,23 +11,25 @@ namespace Skyscraper.Web
         private readonly IGame _game;
         private GameInfo _gameInfo;
         private IList<Card> _usedCards;
-        public SkyscraperHub(IGame game)
+        private static bool tooLate;
+        private ISymbolsProvider _symbolsProvider;
+
+        public SkyscraperHub(IGame game, ISymbolsProvider symbolsProvider)
         {
             _game = game;
+            _symbolsProvider = symbolsProvider;
+            _symbolsProvider.Init(System.Web.Hosting.HostingEnvironment.MapPath("~/content/icons"));
         }
 
-        public void StartGame()
-        {
-            _game.StartGame();
-        }
-
-        public void InitGame(int symbols)
+        public void StartGame(int symbols)
         {
             _game.Init(symbols);
             _game.DistributeFirstCard();
-            foreach(var player in _game.GetPlayers())
+            var card = _game.ExtractCard();
+            var extractedCardsymbols = GetSymbols(card);
+            foreach (var player in _game.GetPlayers())
             {
-                Clients.Client(player.ConnectionId).start(_game.GetPlayerCurrentCard(player.Id).Lines.Select(l => l.Id));
+                Clients.Client(player.ConnectionId).start(GetSymbols(_game.GetPlayerCurrentCard(player.Id)), extractedCardsymbols, GetPlayers());
             }
         }
 
@@ -41,27 +43,36 @@ namespace Skyscraper.Web
             }
             else
             {
-                var symbols = card.Lines.Select(l => l.Id);
+                var symbols = GetSymbols(card);
                 Clients.All.setExtractedCard(symbols, GetPlayers());
             }
         }
 
         public void CardMatched(IEnumerable<int> symbols, string id)
         {
+            if (tooLate)
+                return;
+            tooLate = true;
             _game.AddCardToPlayer(id, new Card(symbols.Select(s => new Line(s)).ToList()));
             ExtractCard();
+            tooLate = false;
         }
 
         public void AddPlayer(PlayerViewModel player)
         {
-            _game.AddPlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
-            Clients.All.setPlayers(GetPlayers());
-            if (_game.GameStarted())
+            if (!_game.GameStarted())
+                _game.AddPlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
+            else
             {
                 //joining the current game
+                _game.UpdatePlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
                 var card = _game.CurrentlyExtractedCard();
-                var symbols = card.Lines.Select(l => l.Id);
-                Clients.Client(Context.ConnectionId).joinGame(symbols, _game.GetPlayerCurrentCard(player.id).Lines.Select(l => l.Id));
+                var symbols = GetSymbols(card);
+                Clients.Client(Context.ConnectionId).joinGame(symbols, GetSymbols(_game.GetPlayerCurrentCard(player.id)));
+            }
+            foreach (var p in _game.GetPlayers())
+            {
+                Clients.Client(p.ConnectionId).setPlayers(GetPlayers());
             }
         }
 
@@ -73,6 +84,11 @@ namespace Skyscraper.Web
         private IEnumerable<PlayerViewModel> GetPlayers()
         {
             return _game.GetPlayers().Select(p => new PlayerViewModel { displayName = p.DisplayName, imageUrl = p.ImageUrl, points = p.Cards.Count, id = p.Id });
+        }
+
+        private IEnumerable<Symbol> GetSymbols(Card card)
+        {
+            return card.Lines.Select(l => _symbolsProvider.GetSymbol(l.Id));
         }
     }
 }

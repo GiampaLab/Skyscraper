@@ -23,7 +23,8 @@ namespace Skyscraper.Web
 
             builder.RegisterType<GameFactory>().As<IGameFactory>();
             builder.RegisterType<Game>().As<IGame>().InstancePerLifetimeScope();
-           
+            builder.RegisterType<SymbolsProvider>().As<ISymbolsProvider>().InstancePerLifetimeScope();
+
             // Register your SignalR hubs.
             builder.RegisterHubs(Assembly.GetExecutingAssembly());
 

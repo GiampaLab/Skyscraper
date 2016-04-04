@@ -14,12 +14,12 @@ namespace Skyscraper.Web
         {
             symbols = new Dictionary<int, string>();
         }
-        public void Init(string basePath, string iconsPath)
+        public void Init(string iconsPath)
         {
             if (_inited)
                 return;
             _inited = true;
-            var icons = Directory.GetFiles(basePath + iconsPath);
+            var icons = Directory.GetFiles(iconsPath);
             new Random().Shuffle(icons);
             var i = 0;
             foreach (var icon in icons)

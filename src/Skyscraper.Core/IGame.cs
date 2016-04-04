@@ -11,9 +11,9 @@ namespace Skyscraper.Core
         void AddCardToPlayer(string playerId, Card card);
         Card GetPlayerCurrentCard(string playerId);
         GameStats GetGameStats();
-        void StartGame();
         void AddPlayer(string displayName, string imageUrl, string connectionId, string id);
         IList<Player> GetPlayers();
+        void UpdatePlayer(string displayName, string imageUrl, string connectionId, string id);
         Card CurrentlyExtractedCard();
         void ResetGame();
     }

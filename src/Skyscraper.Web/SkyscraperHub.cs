@@ -68,7 +68,7 @@ namespace Skyscraper.Web
                 _game.UpdatePlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
                 var card = _game.CurrentlyExtractedCard();
                 var symbols = GetSymbols(card);
-                Clients.Client(Context.ConnectionId).joinGame(symbols, GetSymbols(_game.GetPlayerCurrentCard(player.id)));
+                Clients.Client(Context.ConnectionId).joinGame(symbols, GetSymbols(_game.GetPlayerCurrentCard(player.id)), GetPlayers().First(p  => p.id == player.id));
             }
             foreach (var p in _game.GetPlayers())
             {
@@ -81,9 +81,9 @@ namespace Skyscraper.Web
             _game.ResetGame();
         }
 
-        private IEnumerable<PlayerViewModel> GetPlayers()
+        private IQueryable<PlayerViewModel> GetPlayers()
         {
-            return _game.GetPlayers().Select(p => new PlayerViewModel { displayName = p.DisplayName, imageUrl = p.ImageUrl, points = p.Cards.Count, id = p.Id });
+            return _game.GetPlayers().Select(p => new PlayerViewModel { displayName = p.DisplayName, imageUrl = p.ImageUrl, points = p.Cards.Count, id = p.Id }).AsQueryable();
         }
 
         private IEnumerable<Symbol> GetSymbols(Card card)

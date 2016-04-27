@@ -15,12 +15,6 @@ namespace Skyscraper.Core
         public Game(IGameFactory gameFactory)
         {
             _gameFactory = gameFactory;
-
-            _players = new List<Player>();
-
-
-
-
             SetUp();
         }
         
@@ -71,6 +65,10 @@ namespace Skyscraper.Core
 
         private void SetUp()
         {
+            _gameStarted = false;
+
+            _players = new List<Player>();
+
             foreach (var player in _players)
             {
                 player.ResetCards();
@@ -80,12 +78,15 @@ namespace Skyscraper.Core
 
         public void AddPlayer(string displayName, string imageUrl, string connectionId, string id)
         {
-            if (_players.Any(p => p.Id == id) || _gameStarted)
+            if (_players.Any(p => p.Id == id))
+            {
                 return;
-            var player = new Player(displayName, imageUrl, connectionId, id);
-
-
-            _players.Add(player);
+            }
+            else
+            {
+                var player = new Player(displayName, imageUrl, connectionId, id);
+                _players.Add(player);
+            }
         }
 
         public Card CurrentlyExtractedCard()
@@ -101,13 +102,6 @@ namespace Skyscraper.Core
         {
             return _gameStarted;
         }
-        public void UpdatePlayer(string displayName, string imageUrl, string connectionId, string id)
-        {
-            if(_players.Any(p => p.Id == id))
-            {
-                var player = _players.First(p => p.Id == id);
-            }
-        }
 
         public void ResetGame()
         {
@@ -115,6 +109,7 @@ namespace Skyscraper.Core
             {
                 player.ResetCards();
             }
+
             SetUp();
         }
 

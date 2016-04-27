@@ -21,9 +21,10 @@ namespace Skyscraper.Web
             _symbolsProvider.Init(System.Web.Hosting.HostingEnvironment.MapPath("~/content/icons"));
         }
 
-        public void StartGame(int symbols)
+        public void StartGame(int symbols, PlayerViewModel playerViewModel)
         {
             _game.Init(symbols);
+            AddPlayer(playerViewModel);
             _game.DistributeFirstCard();
             var card = _game.ExtractCard();
             var extractedCardsymbols = GetSymbols(card);
@@ -60,20 +61,14 @@ namespace Skyscraper.Web
 
         public void AddPlayer(PlayerViewModel player)
         {
-            if (!_game.GameStarted())
-                _game.AddPlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
-            else
-            {
-                //joining the current game
-                _game.UpdatePlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
-                var card = _game.CurrentlyExtractedCard();
-                var symbols = GetSymbols(card);
-                Clients.Client(Context.ConnectionId).joinGame(symbols, GetSymbols(_game.GetPlayerCurrentCard(player.id)), GetPlayers().First(p  => p.id == player.id));
-            }
-            foreach (var p in _game.GetPlayers())
-            {
-                Clients.Client(p.ConnectionId).setPlayers(GetPlayers());
-            }
+            _game.AddPlayer(player.displayName, player.imageUrl, Context.ConnectionId, player.id);
+            //var card = _game.CurrentlyExtractedCard();
+            //var symbols = GetSymbols(card);
+            //Clients.Client(Context.ConnectionId).joinGame(symbols, GetSymbols(_game.GetPlayerCurrentCard(player.id)), GetPlayers().First(p  => p.id == player.id));
+            //foreach (var p in _game.GetPlayers())
+            //{
+            //    Clients.Client(p.ConnectionId).setPlayers(GetPlayers());
+            //}
         }
 
         public void ResetGame()

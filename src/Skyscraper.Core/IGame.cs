@@ -13,7 +13,6 @@ namespace Skyscraper.Core
         GameStats GetGameStats();
         void AddPlayer(string displayName, string imageUrl, string connectionId, string id);
         IList<Player> GetPlayers();
-        void UpdatePlayer(string displayName, string imageUrl, string connectionId, string id);
         Card CurrentlyExtractedCard();
         void ResetGame();
     }

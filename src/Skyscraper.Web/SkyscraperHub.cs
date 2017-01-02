@@ -78,7 +78,7 @@ namespace Skyscraper.Web
 
         private IQueryable<PlayerViewModel> GetPlayers()
         {
-            return _game.GetPlayers().Select(p => new PlayerViewModel { displayName = p.DisplayName, imageUrl = p.ImageUrl, points = p.Cards.Count, id = p.Id }).AsQueryable();
+            return _game.GetPlayers().Select(p => new PlayerViewModel { displayName = p.DisplayName, imageUrl = p.ImageUrl, points = p.Cards.Count - 1, id = p.Id }).AsQueryable();
         }
 
         private IEnumerable<Symbol> GetSymbols(Card card)

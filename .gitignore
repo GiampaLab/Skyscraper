@@ -1,2 +1,5 @@
-Skyscraper/obj/
-Skyscraper/bin/
+packages/
+src/Skyscraper.Core/obj/
+src/Skyscraper.Web/bin/
+src/Skyscraper.Web/obj/
+temp/
